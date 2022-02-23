@@ -1,12 +1,15 @@
 use crate::formatter::Format;
 use crate::formatter::Formatter;
+use crate::keyword::is_keyword;
 use crate::list::List;
 use nom::branch::alt;
 use nom::character::complete::alphanumeric1;
 use nom::character::complete::char;
 use nom::character::complete::one_of;
 use nom::combinator::map;
+use nom::combinator::not;
 use nom::combinator::opt;
+use nom::combinator::peek;
 use nom::combinator::recognize;
 use nom::multi::many1;
 use nom::sequence::delimited;
@@ -33,6 +36,7 @@ impl fmt::Display for Name {
 }
 
 pub fn parse_name(input: &str) -> IResult<&str, Name> {
+    let (input, _) = peek(not(is_keyword))(input)?;
     alt((
         map(delimited(char('"'), alphanumeric1, char('"')), |s: &str| {
             Name::QuotedName(s.to_string())

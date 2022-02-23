@@ -19,6 +19,8 @@ mod from_tests;
 #[cfg(test)]
 mod group_tests;
 #[cfg(test)]
+mod join_tests;
+#[cfg(test)]
 mod limit_tests;
 #[cfg(test)]
 mod order_tests;

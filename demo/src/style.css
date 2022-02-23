@@ -106,10 +106,6 @@ button:active {
   transition: none 0s;
 }
 
-button:focus {
-  outline: 1px transparent;
-}
-
 button:before {
   display: none;
 }

@@ -41,28 +41,9 @@ pub fn parse_name(input: &str) -> IResult<&str, Name> {
         map(delimited(char('"'), alphanumeric1, char('"')), |s: &str| {
             Name::QuotedName(s.to_string())
         }),
-        /*map(
-            delimited(char('\''), alphanumeric1, char('\'')),
-            |s: &str| Name::QuotedName(s.to_string()),
-        ),*/
         map(
             recognize(many1(alt((alphanumeric1, recognize(one_of("_")))))),
             |s: &str| Name::Name(s.to_string()),
         ),
     ))(input)
 }
-
-/*impl Lint for ColumnRef {
-    fn get_rules(&self) -> Vec<Box<dyn Rule>> {
-        let n = match self {
-            Self::Name(n) => n,
-            Self::WithFamily(_, n) => n
-        };
-        vec!(
-            Box::new(CamelCaseRule(n.to_string())),
-            Box::new(QuotedIdentifier(n.to_string())),
-            Box::new(ConsecutiveUnderscore(n.to_string()))
-        )
-    }
-}
-*/

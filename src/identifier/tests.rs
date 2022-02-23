@@ -25,12 +25,12 @@ fn test_parse_quoted_name() {
 #[test]
 fn test_parse_schema_qualified_name() {
     assert_eq!(
-        parse_schema_qualified_name("schema.table"),
+        parse_schema_qualified_name("schema.users"),
         Ok((
             "",
             SchemaQualifiedName(
                 Some(Name::Name("schema".to_string())),
-                Name::Name("table".to_string())
+                Name::Name("users".to_string())
             )
         ))
     )
