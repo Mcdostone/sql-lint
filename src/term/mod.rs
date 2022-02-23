@@ -6,10 +6,10 @@ use crate::character::parse_left_parenthesis;
 use crate::character::parse_right_parenthesis;
 use crate::formatter::Format;
 use crate::formatter::Formatter;
+use crate::function::parse_aggregate_function;
+use crate::function::AggregateFunction;
 use std::ops::Deref;
 
-use crate::function::parse_function;
-use crate::function::Function;
 use crate::identifier::parse_name;
 use crate::identifier::Name;
 use crate::keyword::parse_keyword;
@@ -39,7 +39,7 @@ pub enum Term {
     Case(Case),
     BindParameter(BindParameter),
     ColumnRef(ColumnRef),
-    Function(Function),
+    Function(AggregateFunction),
     AliasedTerm(Box<Term>, Name),
     Subquery(Box<SelectStatement>),
 }
@@ -100,7 +100,7 @@ fn term(input: &str) -> IResult<&str, Term> {
     alt((
         map(parse_value, Term::Value),
         map(parse_case, Term::Case),
-        map(parse_function, Term::Function),
+        map(parse_aggregate_function, Term::Function),
         map(parse_column_ref, Term::ColumnRef),
         map(parse_bind_parameter, Term::BindParameter),
         map(

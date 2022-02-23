@@ -10,6 +10,7 @@ use crate::term::case::When;
 use crate::term::column::ColumnRef;
 use crate::term::parse_term;
 use crate::term::value::Value;
+use crate::term::AggregateFunction;
 use crate::term::BindParameter;
 use crate::term::Term;
 
@@ -76,12 +77,12 @@ fn test_term_function() {
         parse_term(input),
         Ok((
             "",
-            Term::Function(Function(
+            Term::Function(AggregateFunction::Function(Function(
                 "AVG".to_string(),
                 List(vec!(Term::ColumnRef(ColumnRef::Name(Name::Name(
                     "price".to_string()
                 )))))
-            ))
+            )))
         ))
     )
 }

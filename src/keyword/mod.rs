@@ -47,6 +47,7 @@ pub enum Keyword {
     Asc,
     All,
     Intersect,
+    Count,
     Minus,
     When,
     Then,
