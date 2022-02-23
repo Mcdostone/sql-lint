@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://github.com/Mcdostone/sql-lint/actions"><img src="https://github.com/Mcdostone/sql-lint/workflows/Cargo%20test/badge.svg" alt="Build Status"></a>
   <a href="https://deps.rs/repo/github/Mcdostone/sql-lint"><img src="https://deps.rs/repo/github/Mcdostone/sql-lint/status.svg" alt="Dependency status"></a>
-  <a href="https://app.netlify.com/sites/laughing-euclid-cf6cad/deploys"><img src="https://api.netlify.com/api/v1/badges/6a46eb76-2ffb-4409-b554-5a0782da01c4/deploy-status" alt="Netlify Status"></a>
+  <a href="https://laughing-euclid-cf6cad.netlify.app/"><img src="https://api.netlify.com/api/v1/badges/6a46eb76-2ffb-4409-b554-5a0782da01c4/deploy-status" alt="Netlify Status"></a>
 </p>
 
 <p align="center">Experimental SQL formatter written in rust.</p>
