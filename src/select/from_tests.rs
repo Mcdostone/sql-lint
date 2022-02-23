@@ -1,3 +1,5 @@
+use crate::assert_format;
+use crate::formatter::Format;
 use crate::identifier::Name;
 use crate::list::List;
 use crate::select::from::TableExpression;
@@ -16,6 +18,24 @@ fn parse_from() {
                 List(vec!(TableExpression(TableName::Name(Name::Name(
                     "users".to_string()
                 ))))),
+                None
+            )
+        ))
+    )
+}
+
+#[test]
+fn parse_from_without_as() {
+    let input = " FROM Employee e1";
+    assert_eq!(
+        parse_from_clause(input),
+        Ok((
+            "",
+            FromClause(
+                List(vec!(TableExpression(TableName::AliasedName(
+                    Name::Name("Employee".to_string()),
+                    Name::Name("e1".to_string())
+                )))),
                 None
             )
         ))
@@ -74,8 +94,7 @@ fn parse_from_as() {
     )
 }
 
-//#[test]
-//fn test_format_from_join() {
-//    test_format!(parse_from_clause("FROM users as u  natural join clients natural   join accounts"),
-//        "FROM users as u\n NATURAL JOIN clients\n NATURAL JOIN accounts")
-//}
+#[test]
+fn test_format_from_join() {
+    assert_format!(parse_from_clause("FROM users  u"), "FROM users AS u")
+}

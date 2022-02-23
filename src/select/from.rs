@@ -79,7 +79,7 @@ pub fn table_expression(input: &str) -> IResult<&str, TableExpression> {
 pub fn table_name(input: &str) -> IResult<&str, TableName> {
     alt((
         map(
-            tuple((parse_name, parse_keyword(Keyword::As), parse_name)),
+            tuple((parse_name, opt(parse_keyword(Keyword::As)), ws(parse_name))),
             |(n, _, a)| TableName::AliasedName(n, a),
         ),
         map(tuple((parse_name, ws(opt(parse_join_clause)))), |(n, _)| {
