@@ -57,7 +57,7 @@ pub fn format(s: &str) -> FResult<String> {
         Err(e) => Err(Error::ParsingError(e.to_string())),
         Ok((remaining, ast)) => {
             if remaining.is_empty() {
-                Ok(ast.lol())
+                Ok(ast.output())
             } else {
                 Err(Error::ParsingIncompleteError(remaining.to_string()))
             }

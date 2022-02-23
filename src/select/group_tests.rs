@@ -60,8 +60,8 @@ fn test_group_by_having() {
 #[test]
 fn test_format_group_by() {
     let (_, t) = parse_group_by_clause("group by age HAVING email Like '%proton%'").unwrap();
-    assert_eq!(t.lol(), "GROUP BY age\nHAVING email LIKE '%proton%'");
+    assert_eq!(t.output(), "GROUP BY age\nHAVING email LIKE '%proton%'");
 
     let (_, t) = parse_group_by_clause("group by age, lastname").unwrap();
-    assert_eq!(t.lol(), "GROUP BY age, lastname")
+    assert_eq!(t.output(), "GROUP BY age, lastname")
 }

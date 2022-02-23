@@ -148,7 +148,7 @@ pub trait Format {
         0
     }
 
-    fn lol(&self) -> String {
+    fn output(&self) -> String {
         let mut f = Formatter::new();
         self.format(&mut f).output()
     }

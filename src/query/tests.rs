@@ -79,7 +79,7 @@ fn test_format_queries() {
     )
     .unwrap();
     assert_eq!(
-        t.lol(),
+        t.output(),
         "SELECT 1\n  FROM users;\n\nINSERT INTO albums (title, release_year)\nVALUES ('Aliento', 2017);"
     )
 }

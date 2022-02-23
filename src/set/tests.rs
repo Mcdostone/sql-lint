@@ -23,5 +23,5 @@ fn test_parse_set_statement() {
 #[test]
 fn test_format_set_statement() {
     let (_, t) = parse_set_statement("SET    idle_in_transaction_session_timeout = 0").unwrap();
-    assert_eq!(t.lol(), "SET idle_in_transaction_session_timeout = 0")
+    assert_eq!(t.output(), "SET idle_in_transaction_session_timeout = 0")
 }

@@ -57,7 +57,7 @@ pub fn parse_user_defined_type_definition(input: &str) -> IResult<&str, UserDefi
 }
 
 pub fn parse_member(input: &str) -> IResult<&str, Member> {
-    map(parse_term, |t| Member(t.lol()))(input)
+    map(parse_term, |t| Member(t.output()))(input)
 }
 
 impl Format for Member {

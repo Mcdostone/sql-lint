@@ -92,22 +92,25 @@ fn test_format_order_by() {
         parse_order_by_clause("ORDEr by username desc")
             .unwrap()
             .1
-            .lol(),
+            .output(),
         "ORDER BY username DESC"
     );
     assert_eq!(
-        parse_order_by_clause("ORDER BY email asc").unwrap().1.lol(),
+        parse_order_by_clause("ORDER BY email asc")
+            .unwrap()
+            .1
+            .output(),
         "ORDER BY email ASC"
     );
     assert_eq!(
-        parse_order_by_clause("ORDER BY age").unwrap().1.lol(),
+        parse_order_by_clause("ORDER BY age").unwrap().1.output(),
         "ORDER BY age"
     );
     assert_eq!(
         parse_order_by_clause("ORDER BY age  ,  year")
             .unwrap()
             .1
-            .lol(),
+            .output(),
         "ORDER BY age, year"
     )
 }

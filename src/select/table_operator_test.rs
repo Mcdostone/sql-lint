@@ -183,32 +183,38 @@ fn test_except() {
 #[test]
 fn test_format_combined_tables() {
     assert_eq!(
-        combined_tables("SELECT 1 EXCEPT SELECT 2").unwrap().1.lol(),
+        combined_tables("SELECT 1 EXCEPT SELECT 2")
+            .unwrap()
+            .1
+            .output(),
         "SELECT 1\n\nEXCEPT\n\nSELECT 2"
     );
     assert_eq!(
-        combined_tables("SELECT 1 Union SELECT 2").unwrap().1.lol(),
+        combined_tables("SELECT 1 Union SELECT 2")
+            .unwrap()
+            .1
+            .output(),
         "SELECT 1\n\n UNION\n\nSELECT 2"
     );
     assert_eq!(
         combined_tables("SELECT 1 Union all SELECT 2")
             .unwrap()
             .1
-            .lol(),
+            .output(),
         "SELECT 1\n\n UNION ALL\n\nSELECT 2"
     );
     assert_eq!(
         combined_tables("(SELECT 1) minus (SELECT 2)")
             .unwrap()
             .1
-            .lol(),
+            .output(),
         "(SELECT 1)\n\nMINUS\n\n(SELECT 2)"
     );
     assert_eq!(
         combined_tables("SELECT 1 intersect SELECT 2")
             .unwrap()
             .1
-            .lol(),
+            .output(),
         "SELECT 1\n\nINTERSECT\n\nSELECT 2"
     );
 }

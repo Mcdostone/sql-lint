@@ -32,7 +32,7 @@ fn test_format_user_defined_type_definition_as() {
     let input = "CREATE TYPE status AS ENUM ('beta','deprecated','stable')";
     let (_, t) = parse_user_defined_type_definition(input).unwrap();
     assert_eq!(
-        t.lol(),
+        t.output(),
         "CREATE TYPE 'status' AS ENUM (\n    'beta',\n    'deprecated',\n    'stable'\n)"
     )
 }

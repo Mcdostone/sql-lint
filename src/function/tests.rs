@@ -25,5 +25,5 @@ fn test_parse_function() {
 #[test]
 fn test_format_function() {
     let (_, t) = parse_function("DO(1, '',true)").unwrap();
-    assert_eq!(t.lol(), "DO(1, '', true)")
+    assert_eq!(t.output(), "DO(1, '', true)")
 }

@@ -3,14 +3,14 @@ use crate::format;
 #[macro_export]
 macro_rules! assert_format {
     ($actual:expr, $expected:expr) => {
-        assert_eq!($actual.unwrap().1.lol(), $expected)
+        assert_eq!($actual.unwrap().1.output(), $expected)
     };
 }
 
 #[macro_export]
 macro_rules! assert_format_not_empty {
     ($actual:expr) => {
-        assert!(!$actual.unwrap().1.lol().is_empty())
+        assert!(!$actual.unwrap().1.output().is_empty())
     };
 }
 

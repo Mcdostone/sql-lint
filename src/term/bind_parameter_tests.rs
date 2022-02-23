@@ -20,6 +20,6 @@ fn test_parse_bind_parameter_with_index() {
 
 #[test]
 fn test_format_bind_parameter() {
-    assert_eq!(BindParameter::Index(1).lol(), ":1");
-    assert_eq!(BindParameter::Placeholder.lol(), "?");
+    assert_eq!(BindParameter::Index(1).output(), ":1");
+    assert_eq!(BindParameter::Placeholder.output(), "?");
 }

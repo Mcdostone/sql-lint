@@ -113,7 +113,7 @@ fn test_update_when() {
 fn test_format_update_statement() {
     let input = "UPDATE movies SET description = ''";
     let (_, t) = parse_update_statement(input).unwrap();
-    assert_eq!(t.lol(), "UPDATE movies\n   SET description = ''")
+    assert_eq!(t.output(), "UPDATE movies\n   SET description = ''")
 }
 
 #[test]
@@ -121,7 +121,7 @@ fn test_format_update_statement_where() {
     let input = "UPDATE movies SET description = '', title = 'Matrix'   WHERE id = 5";
     let (_, t) = parse_update_statement(input).unwrap();
     assert_eq!(
-        t.lol(),
+        t.output(),
         "UPDATE movies\n   SET description = '',\n       title = 'Matrix'\n WHERE id = 5"
     )
 }

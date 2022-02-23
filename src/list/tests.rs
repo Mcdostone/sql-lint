@@ -3,7 +3,7 @@ use crate::{formatter::Format, list::List};
 #[test]
 fn test_format_list() {
     assert_eq!(
-        List(vec!("hello".to_string(), "world".to_string())).lol(),
+        List(vec!("hello".to_string(), "world".to_string())).output(),
         "hello, world"
     )
 }

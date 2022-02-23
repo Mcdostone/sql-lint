@@ -49,12 +49,12 @@ impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Term::Value(value) => write!(f, "{value}"),
-            Term::Case(case) => write!(f, "{}", case.lol()),
+            Term::Case(case) => write!(f, "{}", case.output()),
             Term::BindParameter(parameter) => write!(f, "{parameter}"),
             Term::ColumnRef(column) => write!(f, "{column}"),
-            Term::Function(fu) => write!(f, "{}", fu.lol()),
+            Term::Function(fu) => write!(f, "{}", fu.output()),
             Term::AliasedTerm(n, a) => write!(f, "{n} AS {a}"),
-            Self::Subquery(s) => write!(f, "({})", s.lol()),
+            Self::Subquery(s) => write!(f, "({})", s.output()),
         }
     }
 }*/

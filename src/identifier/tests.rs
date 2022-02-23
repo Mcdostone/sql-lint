@@ -50,5 +50,5 @@ fn test_parse_delimited_name() {
 #[test]
 fn test_format_delimited_name() {
     let (_, t) = parse_delimited_identifier("identifier").unwrap();
-    assert_eq!(t.lol(), "identifier".to_string())
+    assert_eq!(t.output(), "identifier".to_string())
 }

@@ -12,8 +12,8 @@ fn test_parse_limit() {
 #[test]
 fn test_format_limit() {
     let input = "LIMIT    5";
-    assert_eq!(parse_limit_clause(input).unwrap().1.lol(), "LIMIT 5");
+    assert_eq!(parse_limit_clause(input).unwrap().1.output(), "LIMIT 5");
 
     let input = "LIMIT    :1";
-    assert_eq!(parse_limit_clause(input).unwrap().1.lol(), "LIMIT :1")
+    assert_eq!(parse_limit_clause(input).unwrap().1.output(), "LIMIT :1")
 }

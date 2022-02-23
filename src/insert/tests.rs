@@ -118,7 +118,7 @@ fn test_format_insert_statement() {
     )
     .unwrap();
     assert_eq!(
-        t.lol(),
+        t.output(),
         "INSERT INTO emule.movies\nVALUES (1, 'The french dispatch')\n       (2, 'Bo Nunham inside')"
     )
 }
@@ -130,7 +130,7 @@ fn test_format_insert_statement_with_columns() {
     )
     .unwrap();
     assert_eq!(
-        t.lol(),
+        t.output(),
         "INSERT INTO twitch.leaks (name, password)\nVALUES ('dd', 'azerty')\n       ('gg', '1984')"
     )
 }

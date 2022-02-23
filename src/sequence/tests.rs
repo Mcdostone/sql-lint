@@ -81,7 +81,7 @@ fn test_format_sequence() {
     )
     .unwrap();
     assert_eq!(
-        t.lol(),
+        t.output(),
         "CREATE SEQUENCE 'stars'\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO MAXVALUE\n    CACHE 1"
     )
 }
@@ -90,7 +90,7 @@ fn test_format_sequence() {
 fn test_format_sequence_max_min() {
     let (_, t) = parse_sequence("CREATE SEQUENCE stars MINVALUE  1 MAXVALUE 10").unwrap();
     assert_eq!(
-        t.lol(),
+        t.output(),
         "CREATE SEQUENCE 'stars'\n    MINVALUE 1\n    MAXVALUE 10"
     )
 }

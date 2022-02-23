@@ -34,7 +34,7 @@ fn test_parse_varchar_100() {
 fn test_format_data_type() {
     let input = "varchar(100)";
     let (_, t) = parse_data_type(input).unwrap();
-    assert_eq!(t.lol(), "VARCHAR(100)")
+    assert_eq!(t.output(), "VARCHAR(100)")
 }
 #[test]
 fn test_parse_datetime() {
@@ -57,24 +57,24 @@ fn test_parse_datetime() {
 #[test]
 fn test_format_datetime() {
     let (_, t) = parse_data_type("timestamp     WITHOUT TIME zone").unwrap();
-    assert_eq!(t.lol(), "TIMESTAMP WITHOUT TIME ZONE")
+    assert_eq!(t.output(), "TIMESTAMP WITHOUT TIME ZONE")
 }
 
 #[test]
 fn test_format_time() {
     let (_, t) = parse_data_type("time(6)     with TIME zone").unwrap();
-    assert_eq!(t.lol(), "TIME(6) WITH TIME ZONE")
+    assert_eq!(t.output(), "TIME(6) WITH TIME ZONE")
 }
 
 #[test]
 fn test_format_date() {
     let (_, t) = parse_data_type("date").unwrap();
-    assert_eq!(t.lol(), "DATE")
+    assert_eq!(t.output(), "DATE")
 }
 
 #[test]
 fn test_format_string() {
-    assert_eq!("hello".to_string().lol(), "hello")
+    assert_eq!("hello".to_string().output(), "hello")
 }
 
 #[test]
