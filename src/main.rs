@@ -1,5 +1,6 @@
 use clap::Parser;
 use sql_lint::format;
+use sql_lint::query::parse_queries;
 use std::error::Error;
 use std::fs;
 use std::io;
@@ -13,6 +14,8 @@ struct Args {
     input: Option<PathBuf>,
     #[clap(parse(from_os_str), short, long)]
     output: Option<PathBuf>,
+    #[clap(short, long)]
+    debug: bool,
     #[clap()]
     query: Vec<String>,
 }
@@ -30,6 +33,12 @@ fn main() -> Result<(), Box<dyn Error>> {
             _ => args.query.join(""),
         },
     };
+
+    if args.debug {
+        if let Ok((_, s)) = parse_queries(&contents) {
+            eprintln!("{:?}", s);
+        }
+    }
 
     match format(&contents) {
         Ok(formatted) => write_output(&args, &formatted),

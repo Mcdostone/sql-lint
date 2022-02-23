@@ -13,6 +13,8 @@ pub use self::statement::{parse_select_statement, SelectStatement};
 pub use self::from::{parse_from_clause, FromClause};
 
 #[cfg(test)]
+mod clause_tests;
+#[cfg(test)]
 mod from_tests;
 #[cfg(test)]
 mod group_tests;

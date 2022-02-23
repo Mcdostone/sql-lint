@@ -19,9 +19,12 @@ fn test_union() {
             "",
             CombinedTables(
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(1))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(1)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,
@@ -30,9 +33,12 @@ fn test_union() {
                 })),
                 TableOperator::Union(false),
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(2))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(2)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,
@@ -53,9 +59,12 @@ fn test_union_all() {
             "",
             CombinedTables(
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(1))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(1)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,
@@ -64,9 +73,12 @@ fn test_union_all() {
                 })),
                 TableOperator::Union(true),
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(2))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(2)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,
@@ -87,9 +99,12 @@ fn test_intersect() {
             "",
             CombinedTables(
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(1))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(1)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,
@@ -98,9 +113,12 @@ fn test_intersect() {
                 })),
                 TableOperator::Intersect,
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(2))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(2)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,
@@ -121,9 +139,12 @@ fn test_minus() {
             "",
             CombinedTables(
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(1))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(1)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,
@@ -132,9 +153,12 @@ fn test_minus() {
                 })),
                 TableOperator::Minus,
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(2))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(2)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,
@@ -155,9 +179,12 @@ fn test_except() {
             "",
             CombinedTables(
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(1))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(1)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,
@@ -166,9 +193,12 @@ fn test_except() {
                 })),
                 TableOperator::Except,
                 QueryTerm::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(2))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(2)
+                        )))))
+                    ),
                     from: None,
                     r#where: None,
                     group_by: None,

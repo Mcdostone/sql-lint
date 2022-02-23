@@ -53,6 +53,7 @@ pub enum Keyword {
     Then,
     Else,
     Inner,
+    Distinct,
     Outer,
     Cross,
     Left,

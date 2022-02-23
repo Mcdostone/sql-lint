@@ -12,7 +12,7 @@ env:
 jobs:
   tests:
     name: Tests on ${{ matrix.os }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Cache dependencies
@@ -30,7 +30,7 @@ jobs:
 
   clippy:
     name: Run Clippy
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -49,7 +49,7 @@ jobs:
 
   fmt:
     name: Run Rustfmt
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -62,3 +62,34 @@ jobs:
         uses: Swatinem/rust-cache@v1.3.0
       - name: Run cargo fmt
         run: cargo fmt --all -- --check
+
+  demo:
+    name: Deploy demo on netlify
+    needs: [clippy, fmt, tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          override: true
+          components: rustfmt
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - name: Build wasm
+        run: wasm-pack build --release --target web
+      - name: Build demo
+        run: (cd demo && npm install && npm run build)
+      - name: Deploy to netlify
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=demo/dist
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v1.3.0

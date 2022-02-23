@@ -12,4 +12,8 @@ fn test_format_selected_expression() {
     );
 
     assert_format!(parse_select_clause("SELECT  count(*)"), "SELECT COUNT(*)");
+    assert_format!(
+        parse_select_clause("select distinct Salary"),
+        "SELECT DISTINCT Salary"
+    );
 }

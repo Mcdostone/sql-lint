@@ -32,9 +32,12 @@ fn test_parse_queries_statement() {
             "",
             List(vec!(
                 Query::Select(Box::new(SelectStatement {
-                    select: SelectClause(List(vec!(SelectedExpression::Term(Term::Value(
-                        Value::Num(Numeric::Int(1))
-                    ))))),
+                    select: SelectClause(
+                        None,
+                        List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
+                            Numeric::Int(1)
+                        )))))
+                    ),
                     from: Some(FromClause(
                         List(vec!(TableExpression(TableName::Name(Name::Name(
                             "users".to_string()

@@ -4,6 +4,7 @@ use crate::formatter::Format;
 use crate::formatter::Formatter;
 use crate::identifier::parse_name;
 use crate::identifier::Name;
+use crate::keyword::parse_keyword;
 use crate::keyword::Keyword;
 use crate::list::List;
 use crate::term::{parse_term, Term};
@@ -12,19 +13,28 @@ use nom::branch::alt;
 use nom::bytes::complete::tag;
 use nom::character::complete::char;
 use nom::combinator::map;
+use nom::combinator::opt;
+use nom::combinator::value;
 use nom::combinator::value as nomValue;
 use nom::multi::separated_list1;
+use nom::sequence::pair;
 use nom::sequence::tuple;
 use nom::IResult;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct SelectClause(pub List<SelectedExpression>);
+pub struct SelectClause(pub Option<SetQuantifier>, pub List<SelectedExpression>);
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum SelectedExpression {
     All,
     AllWithFamilyName(Name),
     Term(Term),
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum SetQuantifier {
+    Distinct,
+    All,
 }
 
 impl Clause for SelectClause {
@@ -41,17 +51,41 @@ impl Format for SelectedExpression {
     }
 }
 
+impl Format for SetQuantifier {
+    fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {
+        match self {
+            Self::All => f.append(&Keyword::All),
+            Self::Distinct => f.append(&Keyword::Distinct),
+        }
+    }
+}
+
 impl Format for SelectClause {
     fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {
-        f.append_format(self.keyword()).ws().append_format(&self.0)
+        f.append_format(self.keyword()).ws();
+        match &self.0 {
+            Some(q) => f.append_format(q).ws(),
+            None => f,
+        };
+        f.append_format(&self.1)
     }
+}
+
+pub fn parse_set_quantifier(input: &str) -> IResult<&str, SetQuantifier> {
+    alt((
+        value(SetQuantifier::All, parse_keyword(Keyword::All)),
+        value(SetQuantifier::Distinct, parse_keyword(Keyword::Distinct)),
+    ))(input)
 }
 
 pub fn parse_select_clause(input: &str) -> IResult<&str, SelectClause> {
     let (input, _) = SelectClause::parse_keyword(input)?;
     map(
-        separated_list1(parse_comma, ws(parse_selected_expression)),
-        |v| SelectClause(List(v)),
+        pair(
+            opt(parse_set_quantifier),
+            separated_list1(parse_comma, ws(parse_selected_expression)),
+        ),
+        |(q, v)| SelectClause(q, List(v)),
     )(input)
 }
 
