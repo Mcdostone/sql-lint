@@ -3,7 +3,7 @@
 //! SQL parser.
 use crate::formatter::Format;
 /// This module contains the function `format`.
-use crate::query::parse_queries;
+use crate::query::parse_statements;
 
 pub mod character;
 pub mod clause;
@@ -53,7 +53,7 @@ impl std::fmt::Display for Error {
 type FResult<T> = std::result::Result<T, Error>;
 
 pub fn format(s: &str) -> FResult<String> {
-    match parse_queries(s) {
+    match parse_statements(s) {
         Err(e) => Err(Error::ParsingError(e.to_string())),
         Ok((remaining, ast)) => {
             if remaining.is_empty() {

@@ -1,6 +1,6 @@
 use clap::Parser;
 use sql_lint::format;
-use sql_lint::query::parse_queries;
+use sql_lint::query::parse_statements;
 use std::error::Error;
 use std::fs;
 use std::io;
@@ -35,7 +35,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     };
 
     if args.debug {
-        if let Ok((_, s)) = parse_queries(&contents) {
+        if let Ok((_, s)) = parse_statements(&contents) {
             eprintln!("{:?}", s);
         }
     }

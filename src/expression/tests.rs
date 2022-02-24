@@ -220,7 +220,7 @@ fn test_format_in_predicate_value() {
 fn test_format_in_predicate_value_subquery() {
     assert_format!(
         parse_in_predicate_value("(SELECT id from users)"),
-        "\n (SELECT id\n          FROM users)"
+        "\n (        SELECT id\n          FROM users)"
     )
 }
 

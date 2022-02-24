@@ -25,13 +25,13 @@ pub enum TableOperator {
     Except,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum QueryTerm {
     Select(Box<SelectStatement>),
     Parenthesis(Box<QueryTerm>),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct CombinedTables(pub QueryTerm, pub TableOperator, pub QueryTerm);
 
 impl Format for TableOperator {
@@ -65,12 +65,6 @@ impl Format for CombinedTables {
             .append_format(&self.2)
     }
 }
-
-/*impl<T: Format> Format for Box<T> {
-    fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {
-        f.append_format(&self.0)
-    }
-}*/
 
 impl Format for QueryTerm {
     fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {

@@ -16,7 +16,7 @@ use crate::table::parse_table;
 use crate::table::Table;
 use crate::update::parser::parse_update_statement;
 use crate::update::UpdateStatement;
-use crate::ws;
+use crate::ws::ws;
 use nom::multi::many1;
 use nom::sequence::terminated;
 use std::ops::Deref;
@@ -25,6 +25,15 @@ use nom::branch::alt;
 use nom::bytes::complete::tag;
 use nom::combinator::map;
 use nom::IResult;
+
+#[derive(Debug, PartialEq)]
+pub struct Statement(Query);
+
+impl Format for Statement {
+    fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {
+        f.append_format(&self.0).append_str(";")
+    }
+}
 
 impl Format for Query {
     fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {
@@ -38,11 +47,10 @@ impl Format for Query {
             Query::UserDefinedType(c) => f.append_format(c),
             Query::Set(c) => f.append_format(c),
         }
-        .append_str(";")
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Query {
     CombinedSelect(CombinedTables),
     Select(Box<SelectStatement>),
@@ -67,11 +75,14 @@ pub fn parse_query(input: &str) -> IResult<&str, Query> {
     ))(input)
 }
 
-pub fn parse_queries(input: &str) -> IResult<&str, List<Query>> {
-    map(many1(terminated(parse_query, ws::ws(tag(";")))), List)(input)
+pub fn parse_statements(input: &str) -> IResult<&str, List<Statement>> {
+    map(
+        many1(map(terminated(parse_query, ws(tag(";"))), Statement)),
+        List,
+    )(input)
 }
 
-impl Format for List<Query> {
+impl Format for List<Statement> {
     fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {
         for (pos, i) in self.0.iter().enumerate() {
             match pos {

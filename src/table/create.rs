@@ -13,6 +13,8 @@ use crate::identifier::Name;
 use crate::keyword::parse_keyword;
 use crate::keyword::Keyword;
 use crate::list::List;
+use crate::query::parse_query;
+use crate::query::Query;
 use crate::table::constraint::parse_column_constraint_definition;
 use crate::table::constraint::parse_table_constraint_definition;
 use crate::table::constraint::ColumnConstraintDefinition;
@@ -29,27 +31,55 @@ use nom::sequence::delimited;
 use nom::sequence::pair;
 use nom::sequence::tuple;
 use nom::IResult;
-use nom::Parser;
 use std::fmt;
+use std::ops::Deref;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct CreateTableStatement(pub TableRef, pub List<TableElement>);
+pub struct CreateTableStatement(pub TableRef, pub TableContentsSource);
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Subquery(pub Box<Query>);
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum TableContentsSource {
+    TableElementList(List<TableElement>),
+    As(Subquery),
+}
+
+pub fn parse_subquery(input: &str) -> IResult<&str, Subquery> {
+    map(
+        delimited(parse_left_parenthesis, parse_query, parse_right_parenthesis),
+        |q| Subquery(Box::new(q)),
+    )(input)
+}
+
+pub fn parse_table_contents_source(input: &str) -> IResult<&str, TableContentsSource> {
+    alt((
+        map(
+            pair(parse_keyword(Keyword::As), ws(parse_subquery)),
+            |(_, s)| TableContentsSource::As(s),
+        ),
+        map(
+            delimited(
+                parse_left_parenthesis,
+                separated_list1(parse_comma, ws(parse_table_element)),
+                parse_right_parenthesis,
+            ),
+            |t| TableContentsSource::TableElementList(List(t)),
+        ),
+    ))(input)
+}
 
 pub fn parse_create_table(input: &str) -> IResult<&str, CreateTableStatement> {
-    let (input, _) = pair(
-        parse_keyword(Keyword::Create),
-        parse_keyword(Keyword::Table),
-    )(input)?;
-    let (input, table_name) = ws(parse_table_ref).parse(input)?;
-    let (input, column_defs) = map(
-        delimited(
-            parse_left_parenthesis,
-            separated_list1(parse_comma, ws(parse_table_element)),
-            parse_right_parenthesis,
-        ),
-        List,
-    )(input)?;
-    Ok((input, CreateTableStatement(table_name, column_defs)))
+    map(
+        tuple((
+            parse_keyword(Keyword::Create),
+            parse_keyword(Keyword::Table),
+            ws(parse_table_ref),
+            parse_table_contents_source,
+        )),
+        |(_, _, t, e)| CreateTableStatement(t, e),
+    )(input)
 }
 
 pub fn parse_table_element(input: &str) -> IResult<&str, TableElement> {
@@ -69,17 +99,39 @@ impl Format for CreateTableStatement {
             .ws()
             .append(&self.0)
             .ws()
-            .append_str("(")
-            .new_line();
-        f.set_pad(4);
+            .append_format(&self.1)
+    }
+}
 
-        for (pos, line) in self.1 .0.iter().enumerate() {
-            match pos {
-                0 => f.indent(line),
-                _ => f.append_str(",").new_line().indent(line),
-            };
+impl Format for TableContentsSource {
+    fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {
+        match self {
+            Self::As(t) => {
+                f.append(&Keyword::As).ws();
+                f.set_pad(4).new_context().append_format(t).pop_context()
+            }
+            Self::TableElementList(l) => {
+                f.append_str("(").new_line();
+                f.set_pad(4);
+                for (pos, line) in l.0.iter().enumerate() {
+                    match pos {
+                        0 => f.indent(line),
+                        _ => f.append_str(",").new_line().indent(line),
+                    };
+                }
+                f.new_line().append_str(")")
+            }
         }
-        f.new_line().append_str(")")
+    }
+}
+
+impl Format for Subquery {
+    fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {
+        f.append_str("(")
+            .new_line()
+            .append_format(self.0.deref())
+            .new_line()
+            .append_str(")")
     }
 }
 

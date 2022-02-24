@@ -62,7 +62,7 @@ impl Format for SetQuantifier {
 
 impl Format for SelectClause {
     fn format<'a>(&self, f: &'a mut Formatter) -> &'a mut Formatter {
-        f.append_format(self.keyword()).ws();
+        f.left_side(self.keyword()).ws();
         match &self.0 {
             Some(q) => f.append_format(q).ws(),
             None => f,

@@ -10,8 +10,9 @@ use crate::insert::InsertValue;
 use crate::insert::ValuesClause;
 use crate::list::List;
 use crate::numeric::Numeric;
-use crate::query::parse_queries;
+use crate::parse_statements;
 use crate::query::Query;
+use crate::query::Statement;
 use crate::select::clause::SelectedExpression;
 use crate::select::from::TableExpression;
 use crate::select::from::TableName;
@@ -24,15 +25,15 @@ use crate::select::clause::SelectClause;
 use crate::select::SelectStatement;
 
 #[test]
-fn test_parse_queries_statement() {
+fn test_parse_statements() {
     let input =
         "SELECT 1 from users; INSERT INTO albums (title, release_year) VALUES ('Aliento', 2017);";
     assert_eq!(
-        parse_queries(input),
+        parse_statements(input),
         Ok((
             "",
             List(vec!(
-                Query::Select(Box::new(SelectStatement {
+                Statement(Query::Select(Box::new(SelectStatement {
                     select: SelectClause(
                         None,
                         List(vec!(SelectedExpression::Term(Term::Value(Value::Num(
@@ -49,8 +50,8 @@ fn test_parse_queries_statement() {
                     group_by: None,
                     order_by: None,
                     limit: None,
-                })),
-                Query::Insert(InsertStatement(
+                }))),
+                Statement(Query::Insert(InsertStatement(
                     InsertIntoClause(
                         TableRef(None, Name::Name(String::from("albums"))),
                         Some(List(vec!(
@@ -70,7 +71,7 @@ fn test_parse_queries_statement() {
                             ))))
                         ))),
                     ))))))
-                ))
+                )))
             ))
         ))
     )
@@ -78,10 +79,10 @@ fn test_parse_queries_statement() {
 
 #[test]
 fn test_format_queries() {
-    assert_format!(parse_queries("SELECT 1 from users; INSERT INTO albums (title, release_year) VALUES ('Aliento', 2017);"),
+    assert_format!(parse_statements("SELECT 1 from users; INSERT INTO albums (title, release_year) VALUES ('Aliento', 2017);"),
         "SELECT 1\n  FROM users;\n\nINSERT INTO albums (title, release_year)\nVALUES ('Aliento', 2017);"
     );
-    assert_format!(parse_queries("SELECT column_name FROM table1 LEFT JOIN table2 ON table1.column_name = table2.column_name;"),
+    assert_format!(parse_statements("SELECT column_name FROM table1 LEFT JOIN table2 ON table1.column_name = table2.column_name;"),
     "SELECT column_name\n  FROM table1\n       LEFT JOIN table2\n       ON table1.column_name = table2.column_name;"
     )
 }
