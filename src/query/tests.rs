@@ -1,3 +1,4 @@
+use crate::assert_format;
 use crate::expression::Condition;
 use crate::expression::Expression;
 use crate::expression::Operand;
@@ -77,12 +78,10 @@ fn test_parse_queries_statement() {
 
 #[test]
 fn test_format_queries() {
-    let (_, t) = parse_queries(
-        "SELECT 1 from users; INSERT INTO albums (title, release_year) VALUES ('Aliento', 2017);",
-    )
-    .unwrap();
-    assert_eq!(
-        t.output(),
+    assert_format!(parse_queries("SELECT 1 from users; INSERT INTO albums (title, release_year) VALUES ('Aliento', 2017);"),
         "SELECT 1\n  FROM users;\n\nINSERT INTO albums (title, release_year)\nVALUES ('Aliento', 2017);"
+    );
+    assert_format!(parse_queries("SELECT column_name FROM table1 LEFT JOIN table2 ON table1.column_name = table2.column_name;"),
+    "SELECT column_name\n  FROM table1\n       LEFT JOIN table2\n       ON table1.column_name = table2.column_name;"
     )
 }

@@ -106,9 +106,10 @@ impl Keyword {
 }
 
 pub fn is_keyword(input: &str) -> IResult<&str, Keyword> {
-    map_res(peek(take_while1(|c| c != ' ')), |s: &str| {
-        Keyword::from_str(&s.to_lowercase())
-    })(input)
+    map_res(
+        peek(take_while1(|c: char| c.is_alphanumeric())),
+        |s: &str| Keyword::from_str(&s.to_lowercase()),
+    )(input)
 }
 
 impl fmt::Display for Keyword {

@@ -58,7 +58,7 @@ fn test_create_table_primary_key() {
 
 #[test]
 fn test_create_table_constraint_name() {
-    let input = "CREATE TABLE movies (id integer constraint unique UNIQUE)";
+    let input = "CREATE TABLE movies (id integer constraint c_unique UNIQUE)";
     assert_eq!(
         parse_create_table(input),
         Ok((
@@ -70,7 +70,7 @@ fn test_create_table_constraint_name() {
                     DataType(PredefinedType::Integer, None),
                     None,
                     Some(ColumnConstraintDefinition(
-                        Some(ConstraintNameDefinition(Name::Name("unique".to_string()))),
+                        Some(ConstraintNameDefinition(Name::Name("c_unique".to_string()))),
                         ColumnConstraint::Unique(UniqueSpecification::Unique)
                     ))
                 ))))
@@ -82,8 +82,8 @@ fn test_create_table_constraint_name() {
 #[test]
 fn assert_format_create_table() {
     assert_format!(
-        parse_create_table("CREATE TABLE movies (id integer constraint unique UNIQUE, name varchar not null)"),
-        "CREATE TABLE movies (\n        id INTEGER CONSTRAINT unique UNIQUE,\n        name VARCHAR NOT NULL\n)"
+        parse_create_table("CREATE TABLE movies (id integer constraint c UNIQUE, name varchar not null)"),
+        "CREATE TABLE movies (\n        id INTEGER CONSTRAINT c UNIQUE,\n        name VARCHAR NOT NULL\n)"
     );
     assert_format!(
         parse_create_table("CREATE TABLE movies (id integer, PRIMARY KEY(id) )"),
@@ -94,42 +94,3 @@ fn assert_format_create_table() {
         "CREATE TABLE movies (\n        id INTEGER,\n        year INTEGER DEFAULT 2022\n)"
     )
 }
-
-/*
-#[test]
-fn test_alter_table_add() {
-    let input = "ALTER TABLE languages ADD url VARCHAR(255)";
-    assert_eq!(
-        parse_alter_table(&input),
-        Ok((
-            "",
-            AlterTable(
-                TableRef(None, Name::Name("languages".to_string())),
-                vec!(AlterTableAction::AddColumnDefinition(ColumnDef(
-                    Name::Name("url".to_string()),
-                    DataType::Varchar(Some(255)),
-                    None
-                )))
-            )
-        ))
-    )
-}
-
-#[test]
-fn test_alter_table_drop() {
-    let input = "ALTER TABLE languages DROP url";
-    assert_eq!(
-        alter_table(&input),
-        Ok((
-            "",
-            AlterTable(
-                TableRef(None, Name::Name("languages".to_string())),
-                vec!(AlterTableAction::DropColumnDefinition(
-                    Name::Name("url".to_string()),
-                    None
-                ))
-            )
-        ))
-    )
-}
-*/

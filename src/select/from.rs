@@ -7,7 +7,6 @@ use crate::identifier::Name;
 use crate::keyword::parse_keyword;
 use crate::keyword::Keyword;
 use crate::list::List;
-use crate::select::join::parse_join_clause;
 use crate::select::join::parse_joins_clause;
 use crate::select::join::JoinClause;
 
@@ -73,18 +72,16 @@ pub fn parse_from_clause(input: &str) -> IResult<&str, FromClause> {
 }
 
 pub fn table_expression(input: &str) -> IResult<&str, TableExpression> {
-    map(table_name, TableExpression)(input)
+    map(parse_table_name, TableExpression)(input)
 }
 
-pub fn table_name(input: &str) -> IResult<&str, TableName> {
+pub fn parse_table_name(input: &str) -> IResult<&str, TableName> {
     alt((
         map(
             tuple((parse_name, opt(parse_keyword(Keyword::As)), ws(parse_name))),
             |(n, _, a)| TableName::AliasedName(n, a),
         ),
-        map(tuple((parse_name, ws(opt(parse_join_clause)))), |(n, _)| {
-            TableName::Name(n)
-        }),
+        map(parse_name, TableName::Name),
     ))(input)
 }
 
