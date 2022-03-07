@@ -1,5 +1,4 @@
 use self::bind_parameter::BindParameter;
-use self::case::Case;
 use self::column::ColumnRef;
 use self::value::Value;
 use crate::character::parse_left_parenthesis;
@@ -8,6 +7,8 @@ use crate::formatter::Format;
 use crate::formatter::Formatter;
 use crate::function::parse_aggregate_function;
 use crate::function::AggregateFunction;
+use crate::term::case::parse_case_expression;
+use crate::term::case::CaseExpression;
 use std::ops::Deref;
 
 use crate::identifier::parse_name;
@@ -18,7 +19,6 @@ use crate::list::List;
 use crate::select::parse_select_statement;
 use crate::select::SelectStatement;
 use crate::term::bind_parameter::parse_bind_parameter;
-use crate::term::case::parse_case;
 use crate::term::column::parse_column_ref;
 use crate::term::value::parse_value;
 use crate::ws::ws;
@@ -36,7 +36,7 @@ pub mod value;
 #[derive(Debug, PartialEq, Clone)]
 pub enum Term {
     Value(Value),
-    Case(Case),
+    Case(CaseExpression),
     BindParameter(BindParameter),
     ColumnRef(ColumnRef),
     Function(AggregateFunction),
@@ -99,7 +99,7 @@ pub fn parse_term(input: &str) -> IResult<&str, Term> {
 fn term(input: &str) -> IResult<&str, Term> {
     alt((
         map(parse_value, Term::Value),
-        map(parse_case, Term::Case),
+        map(parse_case_expression, Term::Case),
         map(parse_aggregate_function, Term::Function),
         map(parse_column_ref, Term::ColumnRef),
         map(parse_bind_parameter, Term::BindParameter),

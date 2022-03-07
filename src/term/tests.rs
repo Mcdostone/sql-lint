@@ -12,6 +12,7 @@ use crate::term::parse_term;
 use crate::term::value::Value;
 use crate::term::AggregateFunction;
 use crate::term::BindParameter;
+use crate::term::CaseExpression;
 use crate::term::Term;
 
 #[test]
@@ -30,10 +31,10 @@ fn test_term_case() {
         parse_term(input),
         Ok((
             "",
-            Term::Case(Case(
-                Some(Box::new(Term::ColumnRef(ColumnRef::Name(Name::Name(
+            Term::Case(CaseExpression::Simple(Case(
+                Box::new(Term::ColumnRef(ColumnRef::Name(Name::Name(
                     "year".to_string()
-                ))))),
+                )))),
                 vec!(When(
                     Expression::Condition(Condition::Operand(Operand::Term(Term::Value(
                         Value::Num(Numeric::Int(2001))
@@ -41,7 +42,7 @@ fn test_term_case() {
                     Term::Value(Value::Num(Numeric::Int(0)))
                 )),
                 None
-            ),)
+            )),)
         ))
     )
 }

@@ -1,3 +1,4 @@
+use crate::assert_format;
 use crate::formatter::Format;
 use crate::function::{parse_aggregate_function, parse_function, AggregateFunction, Function};
 use crate::identifier::Name;
@@ -33,12 +34,6 @@ fn test_parse_aggregate_function() {
 
 #[test]
 fn test_format_function() {
-    let (_, t) = parse_function("DO(1, '',true)").unwrap();
-    assert_eq!(t.output(), "DO(1, '', true)")
-}
-
-#[test]
-fn test_count_all_function() {
-    let (_, t) = parse_aggregate_function("count(*)").unwrap();
-    assert_eq!(t.output(), "COUNT(*)")
+    assert_format!(parse_function("DO(1, '',true)"), "DO(1, '', true)");
+    assert_format!(parse_aggregate_function("COUNT(*)"), "COUNT(*)")
 }
